@@ -1,0 +1,17 @@
+<Configuration name="ConfigTest" status="ERROR" monitorInterval="5">
+    <Properties>
+        <Property name="basePath">logs</Property>
+    </Properties>
+    <Appenders>
+        <File name="FILE" fileName="${basePath}/log.log" append="true">
+            <PatternLayout pattern="%-5p %d{yyyy-MM-dd HH:mm:ss} [%t] %C (%F:%L) - %m%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="ru.otus.java.basic.filemanager" level="error">
+        </Logger>
+        <Root level="all">
+            <AppenderRef ref="FILE"/>
+        </Root>
+    </Loggers>
+</Configuration>
