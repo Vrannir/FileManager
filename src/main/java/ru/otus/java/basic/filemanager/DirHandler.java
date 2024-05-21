@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class DirHandler {
 
-    private static final String PathDivider = "/";
+//    private static final String PathDivider = "/";
     private Path currentDir;
 
     public DirHandler(String initialDirRaw) {
@@ -26,7 +26,7 @@ public class DirHandler {
         Path path;
         path = Paths.get(name);
         if (path.isAbsolute()) return path;
-        else return Paths.get(currentDir.toString() + PathDivider + name);
+        else return Paths.get(currentDir.toString(), name);
     }
 
     public boolean cdDir(String dirName) {
@@ -36,26 +36,21 @@ public class DirHandler {
         } else return false;
     }
 
-    public List<FileInfo> listDir() {
-        try {
-            List<Path> listDir = Files.list(currentDir).collect(Collectors.toList());
-            listDir.sort(new Comparator<Path>() {
-                public int compare(Path p1, Path p2) {
-                    if (Files.isDirectory(p1) == Files.isDirectory(p2)) {
-                        return p1.toString().compareTo(p2.toString());
-                    } else if (Files.isDirectory(p1)) return -1;
-                    else return 1;
-                }
-            });
-            List<FileInfo> result = new ArrayList<>();
-            for (Path p : listDir) {
-                result.add(new FileInfo(p.getFileName().toString(), Files.size(p), Files.getLastModifiedTime(p), Files.isRegularFile(p)));
+    public List<FileInfo> listDir() throws IOException{
+        List<Path> listDir = Files.list(currentDir).collect(Collectors.toList());
+        listDir.sort(new Comparator<Path>() {
+            public int compare(Path p1, Path p2) {
+                if (Files.isDirectory(p1) == Files.isDirectory(p2)) {
+                    return p1.toString().compareTo(p2.toString());
+                } else if (Files.isDirectory(p1)) return -1;
+                else return 1;
             }
-            return result;
-        } catch (IOException e) {
-            e.printStackTrace();
+        });
+        List<FileInfo> result = new ArrayList<>();
+        for (Path p : listDir) {
+            result.add(new FileInfo(p.getFileName().toString(), Files.size(p), Files.getLastModifiedTime(p), Files.isRegularFile(p)));
         }
-        return null;
+        return result;
     }
 
     public void makeDir(String dirName) throws IOException{
@@ -67,11 +62,11 @@ public class DirHandler {
     }
 
     public void moveFile(String source, String destination) throws IOException {
-        Files.move(addNameToDir(source), Paths.get(addNameToDir(destination).toString() + PathDivider + source));
+        Files.move(addNameToDir(source), Paths.get(addNameToDir(destination).toString(), Paths.get(source).getFileName().toString()));
     }
 
     public void copyFile(String source, String destination) throws IOException {
-        Files.copy(addNameToDir(source), Paths.get(addNameToDir(destination).toString() + PathDivider + source));
+        Files.copy(addNameToDir(source), Paths.get(addNameToDir(destination).toString(), Paths.get(source).getFileName().toString()));
     }
 
     public FileInfo fileInfo(String fileName) throws IOException {

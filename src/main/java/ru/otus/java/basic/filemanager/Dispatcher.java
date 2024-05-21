@@ -2,6 +2,7 @@ package ru.otus.java.basic.filemanager;
 
 import ru.otus.java.basic.filemanager.processors.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class Dispatcher {
         this.unknownCommandProcessor = new UnknownCommandProcessor();
     }
 
-    public void execute(DirHandler dir, String rawCommandString) {
+    public void execute(DirHandler dir, String rawCommandString) throws IOException {
         CommandString commandString = new CommandString(rawCommandString);
         if (!router.containsKey(commandString.getCommand())) {
             unknownCommandProcessor.execute(dir, commandString);

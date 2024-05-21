@@ -5,17 +5,13 @@ import ru.otus.java.basic.filemanager.DirHandler;
 
 import java.io.IOException;
 
-public class RMProcessor implements CommandProcessor{
+public class RMProcessor implements CommandProcessor {
 
     @Override
-    public void execute(DirHandler dir, CommandString cS) {
+    public void execute(DirHandler dir, CommandString cS) throws IOException {
         if (cS.paramQuantity() < 1) System.out.println("Error in syntax");
         else {
-            try {
-                dir.removeFile(cS.getParameter(1));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            dir.removeFile(cS.getParameter(1));
         }
     }
 }

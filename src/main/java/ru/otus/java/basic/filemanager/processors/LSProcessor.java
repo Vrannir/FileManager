@@ -4,10 +4,12 @@ import ru.otus.java.basic.filemanager.CommandString;
 import ru.otus.java.basic.filemanager.DirHandler;
 import ru.otus.java.basic.filemanager.FileInfo;
 
+import java.io.IOException;
+
 public class LSProcessor implements CommandProcessor {
 
     @Override
-    public void execute(DirHandler dir, CommandString cS) {
+    public void execute(DirHandler dir, CommandString cS) throws IOException {
         boolean extView = (cS.paramQuantity() > 0) && (cS.getParameter(1).equals("-I"));
         if (extView) System.out.println("File Name | File Size | Last Update");
         for (FileInfo infoRaw : dir.listDir()) {
